@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>Borrow Book</h2>
+    <form method="POST" action="{{ url_for('borrow_book') }}">
+        <div class="form-group">
+            <label for="user_id">User ID:</label>
+            <input type="text" id="user_id" name="user_id" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="book_id">Book ID:</label>
+            <input type="text" id="book_id" name="book_id" class="form-control" required>
+        </div>
+        <button type="submit" class="btn">Borrow</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Available Books</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Available Copies</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in available_books %}
+            <tr>
+                <td>{{ book.book_id }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.copies_available }}/{{ book.total_copies }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

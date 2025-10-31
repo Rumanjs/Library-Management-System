@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>Transaction History</h2>
+    <form method="GET" action="{{ url_for('transactions') }}" class="form-group">
+        <label for="user_filter">Filter by User ID:</label>
+        <input type="text" id="user_filter" name="user_id" class="form-control" value="{{ request.args.get('user_id', '') }}">
+        <button type="submit" class="btn">Filter</button>
+        {% if request.args.get('user_id') %}
+            <a href="{{ url_for('transactions') }}" class="btn">Clear Filter</a>
+        {% endif %}
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>User</th>
+                <th>Book</th>
+                <th>Borrow Date</th>
+                <th>Due Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+                <th>Fine</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.transaction_id }}</td>
+                <td>{{ users[transaction.user_id].name }}</td>
+                <td>{{ books[transaction.book_id].title }}</td>
+                <td>{{ transaction.borrow_date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ transaction.due_date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ transaction.return_date.strftime('%Y-%m-%d') if transaction.return_date else '-' }}</td>
+                <td>{{ transaction.status }}</td>
+                <td>₹{{ transaction.fine_amount if transaction.fine_amount > 0 else '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
